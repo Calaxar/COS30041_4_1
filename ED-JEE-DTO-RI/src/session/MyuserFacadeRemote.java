@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.MyuserDTO;
 import javax.ejb.Remote;
 
 /**
@@ -13,5 +14,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface MyuserFacadeRemote {
+
+	boolean createRecord(MyuserDTO myuserDTO);
 	
 }
