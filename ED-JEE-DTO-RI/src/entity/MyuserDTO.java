@@ -62,5 +62,8 @@ public class MyuserDTO implements java.io.Serializable {
 		return secAns;
 	}
 	
-		
+	@Override
+	public String toString() {
+		return "|" + this.userid + "|" + this.name + "|" + this.password + "|" + this.email + "|" + this.phone + "|" + this.address + "|" + this.secQn + "|" + this.secAns + "|";
+	}
 }

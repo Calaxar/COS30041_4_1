@@ -6,6 +6,7 @@
 package session;
 
 import entity.MyuserDTO;
+import java.util.ArrayList;
 import javax.ejb.Remote;
 
 /**
@@ -16,5 +17,9 @@ import javax.ejb.Remote;
 public interface MyuserFacadeRemote {
 
 	boolean createRecord(MyuserDTO myuserDTO);
+	MyuserDTO getRecord(String userId);
+	boolean updateRecord(MyuserDTO myuserDTO);
+	boolean deleteRecord(String userId);
+	ArrayList<MyuserDTO> getRecordsByAddress(String address);
 	
 }

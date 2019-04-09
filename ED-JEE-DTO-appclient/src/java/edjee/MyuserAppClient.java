@@ -18,24 +18,33 @@ public class MyuserAppClient {
 	@EJB
 	private static MyuserFacadeRemote myuserFacade;
 
-	public
-			MyuserAppClient() {
+	public MyuserAppClient() {
 	}
 
 	public static void main(String[] args) {
-		MyuserAppClient client = new MyuserAppClient();
-		// assuming inputs from keyboard or any GUI
-		MyuserDTO myuserDTO = new MyuserDTO("000001", "Wei Lai", "123456",
+		System.out.println("getRecord(000001):");
+		MyuserDTO getRecordDTO = myuserFacade.getRecord("000001");
+		if (getRecordDTO != null) {
+			System.out.println(getRecordDTO.toString());
+		}
+		System.out.println("updateRecord() for ID 000001:");
+		MyuserDTO myuserDTO = new MyuserDTO("000001", "Wai Lei", "654321",
 				"wlai@swin.edu.au", "9876543210", "Swinburne EN510b",
-				"What is my name?", "Wei");
-		boolean result = client.createRecord(myuserDTO);
-		client.showCreateResult(result, myuserDTO);
-		// assuming inputs from keyboard or any GUI
-		MyuserDTO myuserDTO2 = new MyuserDTO("000007", "Man Lai", "654321",
-				"wlai@swin.edu.au", "9876543210", "Swinburne EN510b",
-				"What is my name?", "Wei");
-		result = client.createRecord(myuserDTO2);
-		client.showCreateResult(result, myuserDTO2);
+				"What is my name?", "Wai");
+		System.out.print("Before: ");
+		System.out.println(myuserFacade.getRecord(myuserDTO.getUserid()).toString());
+		myuserFacade.updateRecord(myuserDTO);
+		System.out.print("After: ");
+		System.out.println(myuserFacade.getRecord(myuserDTO.getUserid()).toString());
+		System.out.println("deleteRecord(000005):");
+		myuserFacade.deleteRecord("000005");
+		if (myuserFacade.getRecord("000005") == null) {
+			System.out.println("Record has been removed.");
+		} else System.err.println("Record has not been removed.");
+		System.out.println("getRecordsByAddress(\"Swinburne EN510b\")");
+		for (MyuserDTO m: myuserFacade.getRecordsByAddress("Swinburne EN510b                                            ")) {
+			System.out.println(m.toString());
+		}
 	}
 
 	public void
