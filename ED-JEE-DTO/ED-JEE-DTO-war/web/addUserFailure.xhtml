@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<h:head>
+	<title>
+		User Not Added</title>
+</h:head>
+<h:body>
+	<h:form>
+		<h1>UserAdded -Failure</h1>
+		<h2>
+			User whose userid is
+			<h:outputText value="#{myuserManagedBean.userid}"/>
+			cannot be added to the system.
+		</h2>
+		<p></p>
+		<h3>
+			Possibly there is an existing user with the same userid.
+		</h3>
+		<p></p>
+		Back to 
+		<h:commandButton value="Main Menu" 
+						 action="mainmenu.xhtml"/>
+	</h:form>
+</h:body>
+
