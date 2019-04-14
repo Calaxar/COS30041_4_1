@@ -89,6 +89,9 @@ public class MyuserFacade implements MyuserFacadeRemote {
 	
 	@Override
 	public boolean updateRecord(MyuserDTO myuserDTO) {
+		if (getRecord(myuserDTO.getUserid()) == null) {
+			return false;
+		}
 		try {
 			edit(myDTO2DAO(myuserDTO));
 		} catch (Exception e) {
@@ -100,6 +103,9 @@ public class MyuserFacade implements MyuserFacadeRemote {
 	
 	@Override
 	public boolean deleteRecord(String userId) {
+		if (getRecord(userId) == null) {
+			return false;
+		}
 		try {
 		remove(myDTO2DAO(getRecord(userId)));
 		} catch (Exception e) {

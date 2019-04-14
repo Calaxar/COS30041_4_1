@@ -6,9 +6,18 @@
 package web;
 
 import entity.MyuserDTO;
+import java.util.Date;
+import java.util.Properties;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import session.MyuserFacadeRemote;
 
 /**
@@ -57,11 +66,77 @@ public class MyuserManagedBean {
 		}
 		return result;
 	}
+
+	public String updateUser() {
+		String result = "failure";
+		if (isValidUserid(userid) && isValidName(name) && isValidPassword(password) && isValidPassword(cPassword) && isValidEmail(email) && isValidPhone(phone) && isValidAddress(address) && isValidSecQn(secQn) && isValidSecAns(secAns) && password.equals(cPassword)) {
+			MyuserDTO myuserDTO = new MyuserDTO(userid, name, password, email, phone, address, secQn, secAns);
+			if (myuserFacade.updateRecord(myuserDTO)) {
+				result = "success";
+				sendEmail();
+			}
+		}
+		return result;
+	}
+
+	public void sendEmail() {
+		String smtpServer = "smtp.gmail.com";
+		String from = "person@mail.com";
+		String to = "person2@mail.com";
+		String subject = "Netbeans data update";
+		String body = "Hi Person2,\nNetbeans data attached to your email has been updated (by you probably).\nIf it wasn't you... panic\n - Person\n";
+		String emailUser = from;
+		String password = "********";
+		try {
+			Properties props = System.getProperties();
+			// --Attaching to   default Session, or we could start a new one --
+			props.put("mail.smtp.host", smtpServer);
+			props.put("mail.smtp.port", 587);
+			props.put("mail.smtp.auth", true);
+			props.put("mail.smtp.starttls.enable", true);
+			// --prepare a password authenticator --
+			MyAuthenticator myPA = new MyAuthenticator(emailUser, password);
+			// see MyAuthenticator class
+			// get a session
+			Session session = Session.getInstance(props, myPA);
+			// --Create a new message --
+			Message msg = new MimeMessage(session);
+			// --Set the FROM and TO fields --
+			msg.setFrom(new InternetAddress(from));
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
+			// --Set the subject and body text --
+			msg.setSubject(subject);
+			msg.setText(body);
+			// --Set some other header information --
+			msg.setHeader("X-Mailer", "Gmail");
+			msg.setSentDate(new Date());
+			// --Send the message --
+			Transport.send(msg);
+			Transport.send(msg,emailUser, password);
+			System.out.println("Message sent OK.");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public class MyAuthenticator extends Authenticator {
+
+		PasswordAuthentication mypa;
+
+		public MyAuthenticator(String username, String password) {
+			mypa = new PasswordAuthentication(username, password);
+		}
+
+		@Override
+		public PasswordAuthentication getPasswordAuthentication() {
+			return mypa;
+		}
+	}
+
 	/*Some basic checking,complicated checking can be done later.
 	 *Not a good way of doing this
 	 * Should use JSF’s validator method to do this –left as C task
 	 */
-
 	public boolean isValidUserid(String userid) {
 		return (userid != null);
 	}
