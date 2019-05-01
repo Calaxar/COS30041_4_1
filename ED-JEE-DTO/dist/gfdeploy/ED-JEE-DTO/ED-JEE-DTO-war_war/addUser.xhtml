@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core">
 	<h:head>
 		<title>Add a User Page</title>
 	</h:head>
@@ -13,6 +14,15 @@
 			<p>Please enter the user's details below</p>
 		</h2>
 		<h3>
+			<p>
+				<h:message for = "userid" style = "color:red" />
+			</p>
+			<p>
+				<h:message for = "password" style = "color:red" />
+			</p>
+			<p>
+				<h:message for = "cPassword" style = "color:red" />
+			</p>
 			<h:form>
 				<h:panelGrid columns="2">
 					<h:outputText value="User Id: "/>
@@ -20,7 +30,10 @@
 								 value="#{myuserManagedBean.userid}"
 								 required="true"
 								 requiredMessage="The userid field cannot be empty!"
-								 size="6" />
+								 size="6" 
+								 validatorMessage="UserID must be 6 digits long.">
+						<f:validateLength minimum="6" maximum="6" />
+					</h:inputText>
 					<h:outputText value="Name: "/>
 					<h:inputText id="name" value="#{myuserManagedBean.name}"
 								 required="true"
@@ -28,16 +41,23 @@
 								 size="30"/>
 					<h:outputText value="Password "/>
 					<h:inputText id="password" 
-								 value="#{myuserManagedBean.password}"
+								 value="#{myuserManagedBean.password}" 
+								 binding="#{passwordComponent}"
 								 required="true"
 								 requiredMessage="The password field cannot be empty!"
-								 size="6"/>
+								 size="6" 
+								 validatorMessage="The password must contain at least one lowercase letter, one uppercase letter, one number and one of (+, -, *).">
+						<f:validateRegex pattern = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+\-\*]).{6}" />
+					</h:inputText>
 					<h:outputText value="Confirm Password "/>
 					<h:inputText id="cPassword" 
 								 value="#{myuserManagedBean.cPassword}"
 								 required="true"
 								 requiredMessage="The confirm password field cannot be empty!"
-								 size="6"/>
+								 size="6">
+						<f:validator validatorId="passwordValidator" />
+						<f:attribute name="otherValue" value="#{passwordComponent.value}" />
+					</h:inputText>
 					<h:outputText value="Email: "/>
 					<h:inputText id="email" 
 								 value="#{myuserManagedBean.email}"
